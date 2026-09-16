@@ -213,16 +213,25 @@ Hoje o checkout simula o pagamento (`CheckoutPage.tsx`, função `finalize`). Pa
 
 ## 8. Deploy no Render
 
-O frontend pode ser publicado agora como **Static Site**. O arquivo `render.yaml` deste repositório já define o build e a pasta publicada:
+O frontend continua sendo um **Static Site**, porque React/Vite gera arquivos estáticos. A API Laravel não é estática: o blueprint `render.yaml` também define um Web Service Docker para a API e um PostgreSQL gerenciado.
 
 ```text
-Build Command: npm ci && npm run build
-Publish Directory: dist
+Frontend: npm ci && npm run build → dist
+API: Dockerfile em backend/ → Laravel + Apache
+Banco: PostgreSQL gerenciado pelo Render
 ```
 
-No painel do Render: `New` → `Static Site` → conecte o repositório → confirme esses valores → adicione `VITE_USE_MOCK=true` para a demonstração. Para usar a API, defina `VITE_USE_MOCK=false` e `VITE_API_BASE_URL` apontando para o backend.
+### Publicação pelo Blueprint
 
-O diretório `backend/` já é um projeto Laravel executável. Para publicar a API no Render, configure-o como um Web Service separado, use PostgreSQL ou MySQL gerenciado, defina as variáveis de ambiente e execute as migrations durante o deploy.
+1. No Render, selecione `New` e depois `Blueprint`.
+2. Conecte o repositório `Mariastodi/ConvertoTicket`.
+3. Confirme a criação de `converto-frontend`, `converto-api` e `converto-db`.
+4. Aguarde o banco e a API subirem.
+5. Copie a URL real da API e atualize `VITE_API_BASE_URL` no serviço frontend para `https://sua-api.onrender.com/api`.
+6. Altere `VITE_USE_MOCK` para `false` quando as telas estiverem consumindo a API real.
+7. Atualize `FRONTEND_URL` e `SANCTUM_STATEFUL_DOMAINS` com a URL real do frontend.
+
+No plano gratuito, os serviços podem dormir após um período sem acesso e o banco pode ter limites de armazenamento e retenção. Para uma demo, o Static Site é suficiente; para autenticação e pedidos reais, publique também a API e o banco.
 
 ## 9. Segurança
 
