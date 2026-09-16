@@ -1,6 +1,6 @@
 # Converto
 
-Uma plataforma de ingressos simples, moderna e com taxas mais justas — protótipo V1 navegável para demonstração a parceiros e investidores.
+Uma plataforma de ingressos simples, moderna e com taxas mais justas protótipo V1 navegável para demonstração a parceiros e investidores.
 
 Este repositório contém dois projetos:
 
@@ -11,7 +11,7 @@ converto/
 └── README.md
 ```
 
-Na V1, o frontend funciona sozinho com dados mockados (nenhuma instalação de PHP ou MySQL é necessária para rodar a demonstração). O backend é entregue como esqueleto arquitetural, pronto para receber um `laravel new` real quando o time decidir avançar para produção. As páginas da demonstração ainda consomem alguns mocks diretamente para manter a navegação instantânea; a camada `src/services/api.ts` já concentra os contratos para a futura integração REST.
+Na V1, o frontend funciona sozinho com dados mockados. O backend é entregue como esqueleto arquitetural, pronto para receber um `laravel new` real quando o time decidir avançar para produção. As páginas da demonstração ainda consomem alguns mocks diretamente para manter a navegação instantânea; a camada `src/services/api.ts` já concentra os contratos para a futura integração REST.
 
 ---
 
@@ -39,13 +39,13 @@ Todos os valores, eventos, nomes e números são **fictícios**, criados apenas 
 |------------|------------|
 | Frontend   | React 19 + Vite + TypeScript + React Router + Tailwind CSS v4 |
 | Ícones     | lucide-react |
-| Backend    | PHP + Laravel (esqueleto) |
+| Backend    | PHP + Laravel |
 | Banco      | MySQL |
 | Comunicação | API REST (`/api/...`) |
 
 ---
 
-## 3. Rodando o frontend (a demonstração)
+## 3. Rodando o frontend 
 
 Pré-requisito: Node.js 20+.
 
@@ -55,7 +55,7 @@ npm install
 npm run dev
 ```
 
-Acesse `http://localhost:5173`. Isso já é suficiente para navegar por toda a demonstração — os dados vêm de `src/data/mock.ts` e são servidos através de `src/services/api.ts`, que simula as chamadas de rede.
+Acesse `http://localhost:5173`. Isso já é suficiente para navegar por toda a demonstração os dados vêm de `src/data/mock.ts` e são servidos através de `src/services/api.ts`, que simula as chamadas de rede.
 
 Para gerar a build de produção:
 
@@ -135,9 +135,9 @@ R$ 0,50 por ingresso. Assim, 1 ingresso custa R$ 0,50 de taxa e 3 ingressos cust
 
 ---
 
-## 4. Rodando o backend (Laravel)
+## 4. Rodando o backend
 
-O backend é entregue como **esqueleto arquitetural**: models, controllers, migrations e rotas já escritos, prontos para serem colados dentro de uma instalação real do Laravel (o ambiente desta demonstração não tem acesso ao Packagist para instalar o framework).
+O backend é entregue como **esqueleto arquitetural**: models, controllers, migrations e rotas já escritos, prontos para serem colados dentro de uma instalação real do Laravel.
 
 ```bash
 composer create-project laravel/laravel converto-api
@@ -252,7 +252,7 @@ O diretório `backend/` ainda não é um projeto Laravel executável sozinho: el
 
 ## 10. Roadmap
 
-**Converto 1.0** (esta entrega): venda de ingressos, eventos, experiências, checkout simulado, taxas transparentes, dashboard básico.
+**Converto 1.0**: venda de ingressos, eventos, experiências, checkout simulado, taxas transparentes, dashboard básico.
 
 **Converto 2.0**: login e autenticação real, pagamento real, QR Code validável, check-in de participantes, relatórios avançados, integração com WhatsApp, notificações, programa de fidelidade.
 
