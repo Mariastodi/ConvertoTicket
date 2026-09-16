@@ -1,4 +1,4 @@
-# Converto
+# ConvertoTicket
 
 Uma plataforma de ingressos simples, moderna e com taxas mais justas protótipo V1 navegável para demonstração a parceiros e investidores.
 
