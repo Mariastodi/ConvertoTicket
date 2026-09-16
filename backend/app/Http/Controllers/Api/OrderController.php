@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\TicketType;
 use App\Services\PricingService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -16,9 +17,12 @@ class OrderController extends Controller
     {
     }
 
-    public function show(string $code)
+    public function show(Request $request, string $code)
     {
-        $order = Order::with('items')->where('code', $code)->firstOrFail();
+        $order = Order::with('items')
+            ->where('code', $code)
+            ->where('user_id', $request->user()->id)
+            ->firstOrFail();
 
         return response()->json($order);
     }
@@ -31,9 +35,9 @@ class OrderController extends Controller
             'buyer.document' => 'required|string|max:20',
             'buyer.phone' => 'required|string|max:20',
             'payment_method' => 'required|in:pix,cartao',
-            'items' => 'required|array|min:1',
+            'items' => 'required|array|min:1|max:30',
             'items.*.ticket_type_id' => 'required|exists:ticket_types,id',
-            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.quantity' => 'required|integer|min:1|max:20',
             'items.*.experience_date' => 'nullable|date',
         ]);
 
@@ -43,10 +47,22 @@ class OrderController extends Controller
             $items = [];
 
             foreach ($data['items'] as $item) {
-                $ticketType = TicketType::findOrFail($item['ticket_type_id']);
+                $ticketType = TicketType::query()
+                    ->with('ticketable')
+                    ->lockForUpdate()
+                    ->findOrFail($item['ticket_type_id']);
+
+                if ($ticketType->quantity_available < $item['quantity']) {
+                    throw ValidationException::withMessages([
+                        'items' => "Ingressos insuficientes para {$ticketType->name}.",
+                    ]);
+                }
+
                 $lineTotal = $ticketType->price * $item['quantity'];
                 $subtotal += $lineTotal;
                 $quantity += $item['quantity'];
+
+                $ticketType->decrement('quantity_available', $item['quantity']);
 
                 $items[] = [
                     'ticket_type_id' => $ticketType->id,
@@ -71,7 +87,7 @@ class OrderController extends Controller
                 'subtotal' => $totals['subtotal'],
                 'fee' => $totals['fee'],
                 'total' => $totals['total'],
-                'status' => 'pago',
+                'status' => 'pendente',
             ]);
 
             $order->items()->createMany($items);

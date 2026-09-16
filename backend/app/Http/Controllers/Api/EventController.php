@@ -38,6 +38,8 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        abort_unless($request->user()->isOrganizer(), 403, 'Apenas organizadores podem criar eventos.');
+
         $data = $request->validate([
             'title' => 'required|string|max:180',
             'subtitle' => 'nullable|string|max:220',

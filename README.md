@@ -222,11 +222,17 @@ Publish Directory: dist
 
 No painel do Render: `New` → `Static Site` → conecte o repositório → confirme esses valores → adicione `VITE_USE_MOCK=true` para a demonstração. Para usar a API, defina `VITE_USE_MOCK=false` e `VITE_API_BASE_URL` apontando para o backend.
 
-O diretório `backend/` ainda não é um projeto Laravel executável sozinho: ele contém os arquivos de domínio para serem copiados para uma instalação Laravel. Para publicar a API no Render, primeiro é necessário criar essa instalação com `composer create-project`, adicionar `composer.json`, `artisan`, `bootstrap/` e `config/`, configurar MySQL/PostgreSQL e então subir um Web Service PHP separado.
+O diretório `backend/` já é um projeto Laravel executável. Para publicar a API no Render, configure-o como um Web Service separado, use PostgreSQL ou MySQL gerenciado, defina as variáveis de ambiente e execute as migrations durante o deploy.
+
+## 9. Segurança
+
+O backend aplica autenticação Sanctum, rate limit em login e cadastro, CORS restrito pela variável `FRONTEND_URL`, headers HTTP de proteção, autorização por proprietário do evento, pedidos visíveis apenas ao usuário autenticado, validação de payload, lock transacional de estoque e status `pendente` até uma confirmação real de pagamento. Há testes de regressão em `backend/tests/Feature/SecurityTest.php`.
+
+Nenhum sistema é impossível de invadir. Em produção, mantenha `APP_DEBUG=false`, use HTTPS, configure segredos apenas no ambiente do provedor, aplique backups e monitore logs. O gateway de pagamento deve confirmar o pedido por webhook antes de mudar o status para `pago`.
 
 ---
 
-## 9. Design
+## 10. Design
 
 - **Identidade**: preto e amarelo sobre fundo branco, extraídos da logo da Converto.
 - **Tipografia**: Space Grotesk (títulos) + Manrope (texto).
@@ -235,7 +241,7 @@ O diretório `backend/` ainda não é um projeto Laravel executável sozinho: el
 
 ---
 
-## 10. Roadmap
+## 11. Roadmap
 
 **Converto 1.0**: venda de ingressos, eventos, experiências, checkout simulado, taxas transparentes, dashboard básico.
 
@@ -245,6 +251,6 @@ O diretório `backend/` ainda não é um projeto Laravel executável sozinho: el
 
 ---
 
-## 10. Aviso
+## 12. Aviso
 
 Este é um protótipo de demonstração. Nomes de eventos, valores, taxas e métricas do dashboard são fictícios e não representam dados reais da Converto.
