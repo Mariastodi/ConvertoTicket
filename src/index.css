@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", "Manrope", sans-serif;
+  --font-sans: "Manrope", sans-serif;
+
+  --color-paper: #fcfbf8;
+  --color-paper-dim: #f4f1e9;
+  --color-ink: #15130f;
+  --color-ink-soft: #56514a;
+  --color-ink-faint: #8b8579;
+  --color-line: #e7e2d5;
+  --color-line-strong: #d8d2c1;
+
+  --color-yellow: #f6c100;
+  --color-yellow-soft: #fde9a6;
+  --color-yellow-deep: #a9780a;
+  --color-yellow-ink: #3a2c00;
+
+  --color-signal: #1f7a4d;
+  --color-signal-soft: #e3f3ea;
+
+  --shadow-ticket: 0 1px 0 0 rgba(21, 19, 15, 0.06);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-yellow);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .ticket-notch {
+    clip-path: polygon(
+      0 0,
+      calc(100% - 22px) 0,
+      100% 22px,
+      100% 100%,
+      22px 100%,
+      0 calc(100% - 22px)
+    );
+  }
+
+  .ticket-notch-sm {
+    clip-path: polygon(
+      0 0,
+      calc(100% - 14px) 0,
+      100% 14px,
+      100% 100%,
+      14px 100%,
+      0 calc(100% - 14px)
+    );
+  }
+
+  .perforation {
+    background-image: radial-gradient(
+      circle,
+      var(--color-paper) 2.5px,
+      transparent 2.6px
+    );
+    background-size: 14px 14px;
+    background-repeat: repeat-x;
+    background-position: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
