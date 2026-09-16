@@ -7,11 +7,11 @@ Este repositório contém dois projetos:
 ```
 converto/
 ├── src/            → Frontend (React + Vite + TypeScript) — a demonstração funcional
-├── backend/         → Esqueleto do backend (Laravel/PHP) — arquitetura pronta para implementação
+├── backend/         → API Laravel completa com autenticação, domínio e migrations
 └── README.md
 ```
 
-Na V1, o frontend funciona sozinho com dados mockados. O backend é entregue como esqueleto arquitetural, pronto para receber um `laravel new` real quando o time decidir avançar para produção. As páginas da demonstração ainda consomem alguns mocks diretamente para manter a navegação instantânea; a camada `src/services/api.ts` já concentra os contratos para a futura integração REST.
+Na V1, o frontend funciona sozinho com dados mockados. O backend agora é uma instalação Laravel executável, com Composer, Sanctum, models, migrations, regras de domínio e API REST. As páginas da demonstração ainda consomem alguns mocks diretamente para manter a navegação instantânea; a camada `src/services/api.ts` já concentra os contratos para a integração REST.
 
 ---
 
@@ -39,7 +39,7 @@ Todos os valores, eventos, nomes e números são **fictícios**, criados apenas 
 |------------|------------|
 | Frontend   | React 19 + Vite + TypeScript + React Router + Tailwind CSS v4 |
 | Ícones     | lucide-react |
-| Backend    | PHP + Laravel |
+| Backend    | PHP 8.3+ + Laravel 13 + Sanctum |
 | Banco      | MySQL |
 | Comunicação | API REST (`/api/...`) |
 
@@ -137,24 +137,15 @@ R$ 0,50 por ingresso. Assim, 1 ingresso custa R$ 0,50 de taxa e 3 ingressos cust
 
 ## 4. Rodando o backend
 
-O backend é entregue como **esqueleto arquitetural**: models, controllers, migrations e rotas já escritos, prontos para serem colados dentro de uma instalação real do Laravel.
+O backend é uma aplicação Laravel completa dentro de `backend/`.
 
 ```bash
-composer create-project laravel/laravel converto-api
-cd converto-api
-
-# copie o conteúdo de backend/ deste repositório para dentro do projeto Laravel,
-# sobrescrevendo app/, database/migrations/ e routes/api.php
-
-cp -r ../converto/backend/app/* app/
-cp -r ../converto/backend/database/migrations/* database/migrations/
-cp ../converto/backend/routes/api.php routes/api.php
-cp ../converto/backend/.env.example .env
-
-composer require laravel/sanctum
-php artisan install:api
-
+cd backend
+composer install
+cp .env.example .env
 php artisan key:generate
+php artisan migrate
+php artisan serve
 ```
 
 ### Configurando o banco (MySQL)
@@ -168,12 +159,6 @@ php artisan migrate
 ```
 
 Isso cria as tabelas: `users`, `categories`, `venues`, `events`, `experiences`, `experience_date_slots`, `ticket_types` (polimórfica — atende eventos e experiências), `orders`, `order_items`.
-
-### Subindo a API
-
-```bash
-php artisan serve
-```
 
 A API sobe em `http://localhost:8000`.
 

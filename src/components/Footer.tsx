@@ -48,7 +48,7 @@ export default function Footer() {
             rel="noreferrer"
             className="transition-colors hover:text-ink"
           >
-            Instagram @convertohub
+            Instagram
           </a>
         </div>
       </div>
